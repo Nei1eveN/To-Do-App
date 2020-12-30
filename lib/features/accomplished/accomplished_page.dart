@@ -7,6 +7,8 @@ import 'package:todo_app/utils/constants.dart';
 import 'package:todo_app/widgets/todo_item.dart';
 
 class AccomplishedPage extends StatelessWidget {
+  static const route = 'accomplished';
+
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
