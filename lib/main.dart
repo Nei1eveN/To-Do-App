@@ -138,7 +138,8 @@ class AppRouter {
         break;
       case ActivePage.route:
         return MaterialPageRoute<dynamic>(builder: (BuildContext context) => ActivePage());
-        break;
+      case AccomplishedPage.route:
+        return MaterialPageRoute<dynamic>(builder: (BuildContext context) => AccomplishedPage());
       case AddTodo.route:
         final args = settings.arguments as AddTodoArguments;
         return MaterialPageRoute<dynamic>(builder: (BuildContext context) => AddTodo(args: args));
