@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class TileItem extends StatelessWidget {
   final IconData iconData;
   final String title;
-  final Function onTap;
+  final Function(BuildContext context) onTap;
   final Color focusColor;
   final bool isSelected;
 
@@ -18,18 +18,15 @@ class TileItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var circularRadius = Radius.circular(32.0);
-    var iconColor = isSelected ? Colors.white : null;
-    var sideBorderRadius = BorderRadius.only(
-      bottomRight: circularRadius,
-      topRight: circularRadius,
-    );
+    const circularRadius = Radius.circular(32.0);
+    final iconColor = isSelected ? Colors.white : null;
+    const sideBorderRadius = BorderRadius.only(bottomRight: circularRadius, topRight: circularRadius);
     return Container(
       padding: const EdgeInsets.only(right: 8.0),
       child: ClipRRect(
         borderRadius: isSelected ? sideBorderRadius : BorderRadius.zero,
         child: ListTile(
-          shape: RoundedRectangleBorder(borderRadius: sideBorderRadius),
+          shape: const RoundedRectangleBorder(borderRadius: sideBorderRadius),
           leading: Icon(
             iconData,
             color: iconColor,
@@ -42,7 +39,7 @@ class TileItem extends StatelessWidget {
                 ),
           ),
           tileColor: isSelected ? focusColor : null,
-          onTap: onTap,
+          onTap: () => onTap(context),
         ),
       ),
     );

@@ -13,9 +13,15 @@ class AddTodoAction extends ReduxAction<AppState> {
   @override
   Future<AppState> reduce() async {
     return state.copyWith(
-      todoList: <Todo>[]
-        ..addAll(state.todoList)
-        ..add(Todo(id: todo.id, title: todo.title, description: todo.description, isAccomplished: todo.isAccomplished)),
+      todoList: <Todo>[
+        ...state.todoList,
+        Todo(
+          id: todo.id,
+          title: todo.title,
+          description: todo.description,
+          isAccomplished: todo.isAccomplished,
+        )
+      ],
     );
   }
 }
@@ -27,8 +33,8 @@ class UpdateTodoAction extends ReduxAction<AppState> {
 
   @override
   Future<AppState> reduce() async {
-    final newList = <Todo>[]..addAll(state.todoList);
-    final index = newList.indexWhere((element) => element.id == this.todo.id);
+    final newList = <Todo>[...state.todoList];
+    final index = newList.indexWhere((element) => element.id == todo.id);
     newList.replaceRange(index, index + 1, [todo]);
     return state.copyWith(todoList: newList);
   }

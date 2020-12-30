@@ -8,5 +8,5 @@ part 'app_state.freezed.dart';
 abstract class AppState with _$AppState {
   const factory AppState({String title, int pageIndex, List<Todo> todoList}) = _AppState;
 
-  factory AppState.initState() => AppState(title: active, todoList: [], pageIndex: 0);
+  factory AppState.initState() => const AppState(title: active, todoList: [], pageIndex: 0);
 }

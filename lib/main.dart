@@ -60,27 +60,30 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  Widget displayFloatingButton(bool isActivePage) {
+  Widget displayFloatingButton({bool isActivePage}) {
     return isActivePage
-        ? FloatingActionButton(onPressed: () => _navigateToAddTodo(null), tooltip: newTodo, child: Icon(Icons.add))
+        ? FloatingActionButton(
+            onPressed: () => _navigateToAddTodo(null),
+            tooltip: newTodo,
+            child: const Icon(Icons.add),
+          )
         : null;
   }
 
   void _navigateToAddTodo(Todo todo) {
     Future.delayed(
-      Duration(milliseconds: 200),
+      const Duration(milliseconds: 200),
       () => Navigator.of(context).pushNamed(AddTodo.route, arguments: AddTodoArguments(todo: todo)),
     );
   }
 
   /// Dispatches actions when a TileItem is tapped.
   ///
-  /// * [newTitle] to be passed on [ChangeTitleAction]
-  /// * [newIndex] to be passed on [ChangePageIndexAction]
+  /// * [newTitle] changes title; to be passed on [ChangeScreenAction]
+  /// * [newIndex] changes current index to identify which screen will be shown; to be passed on [ChangeScreenAction]
   void _dispatchAction(String newTitle, int newIndex) {
-    StoreProvider.dispatch(context, ChangeTitleAction(title: newTitle));
-    StoreProvider.dispatch(context, ChangePageIndexAction(pageIndex: newIndex));
-    Future.delayed(Duration(milliseconds: 200), () => Navigator.pop(context));
+    StoreProvider.dispatch(context, ChangeScreenAction(title: newTitle, pageIndex: newIndex));
+    Future.delayed(const Duration(milliseconds: 200), () => Navigator.pop(context));
   }
 
   @override
@@ -88,33 +91,35 @@ class _MyHomePageState extends State<MyHomePage> {
     return StoreConnector<AppState, MainViewModel>(
       model: MainViewModel(),
       builder: (context, viewModel) {
-        final title = viewModel.title;
-        final isActivePage = title == active;
         final pageIndex = viewModel.pageIndex;
+        final isActivePage = pageIndex == 0;
         return Scaffold(
           appBar: AppBar(
-            title: Text(title, style: TextStyle(fontSize: 16.0)),
+            title: Text(
+              viewModel.title,
+              style: const TextStyle(fontSize: 16.0),
+            ),
             backgroundColor: isActivePage ? Colors.blue : Colors.red,
           ),
-          body: pageIndex == 1 ? AccomplishedPage() : ActivePage(),
-          floatingActionButton: displayFloatingButton(isActivePage),
+          body: isActivePage ? ActivePage() : AccomplishedPage(),
+          floatingActionButton: displayFloatingButton(isActivePage: isActivePage),
           drawer: Drawer(
             child: ListView(
               children: [
-                SizedBox(height: kToolbarHeight),
+                const SizedBox(height: kToolbarHeight),
                 TileItem(
                   iconData: Icons.lightbulb_outline,
                   title: active,
-                  onTap: () => _dispatchAction(active, 0),
+                  onTap: (context) => _dispatchAction(active, 0),
                   focusColor: Colors.blue[600],
-                  isSelected: pageIndex == 0,
+                  isSelected: isActivePage,
                 ),
                 TileItem(
                   iconData: Icons.done_all_outlined,
                   title: accomplished,
-                  onTap: () => _dispatchAction(accomplished, 1),
+                  onTap: (context) => _dispatchAction(accomplished, 1),
                   focusColor: Colors.red[600],
-                  isSelected: pageIndex == 1,
+                  isSelected: !isActivePage,
                 ),
               ],
             ),
