@@ -18,7 +18,7 @@ class AddTodo extends StatefulWidget {
 
   final AddTodoArguments args;
 
-  AddTodo({Key key, @required this.args}) : super(key: key);
+  const AddTodo({Key key, @required this.args}) : super(key: key);
 
   @override
   _AddTodoState createState() => _AddTodoState();
@@ -36,14 +36,14 @@ class _AddTodoState extends State<AddTodo> {
     isChecked = false;
     if (widget.args.todo != null) {
       final todo = widget.args.todo;
-      setChecked(todo.isAccomplished);
+      setChecked(value: todo.isAccomplished);
       _titleController.text = todo.title;
       _descriptionController.text = todo.description;
     }
     super.initState();
   }
 
-  void setChecked(bool value) => setState(() => isChecked = value);
+  void setChecked({bool value}) => setState(() => isChecked = value);
 
   @override
   Widget build(BuildContext context) {
@@ -60,12 +60,12 @@ class _AddTodoState extends State<AddTodo> {
           child: Scaffold(
             appBar: AppBar(
               leading: IconButton(
-                icon: Icon(Icons.close),
+                icon: const Icon(Icons.close),
                 onPressed: () {
                   FocusScope.of(context).unfocus();
                   final title = _titleController.text;
                   final description = _descriptionController.text;
-                  if (widget.args.todo == null && title.isNotEmpty || description.isNotEmpty) {
+                  if (widget.args.todo == null && (title.isNotEmpty || description.isNotEmpty)) {
                     StoreProvider.dispatch<AppState>(
                       context,
                       AddTodoAction(
@@ -91,7 +91,7 @@ class _AddTodoState extends State<AddTodo> {
                     );
                   }
                   Future.delayed(
-                    Duration(milliseconds: 200),
+                    const Duration(milliseconds: 200),
                     () => Navigator.of(context).pop(),
                   );
                 },
@@ -99,7 +99,7 @@ class _AddTodoState extends State<AddTodo> {
               actions: [
                 Checkbox(
                   value: isChecked,
-                  onChanged: setChecked,
+                  onChanged: (value) => setChecked(value: value),
                 ),
               ],
             ),
@@ -123,7 +123,7 @@ class _AddTodoState extends State<AddTodo> {
                   Expanded(
                     child: TextField(
                       controller: _descriptionController,
-                      autofocus: _descriptionController.text.isEmpty ? true : false,
+                      autofocus: _descriptionController.text.isEmpty,
                       decoration: InputDecoration(
                         hintText: 'Note',
                         border: InputBorder.none,

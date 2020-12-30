@@ -32,17 +32,18 @@ class ActivePage extends StatelessWidget {
                     ),
                   ),
                   Expanded(
-                    child: ListView(
+                    child: GridView.count(
+                      crossAxisCount: 2,
                       children: viewModel.todoList.where((element) {
                         return element.isAccomplished == false;
                       }).map((todo) {
                         return TodoItem(
                           title: todo.title,
                           description: todo.description,
-                          onPressed: () {
+                          onPressed: (context) {
                             Future.delayed(
-                              Duration(milliseconds: 200),
-                                  () {
+                              const Duration(milliseconds: 200),
+                              () {
                                 Navigator.of(context).pushNamed(
                                   AddTodo.route,
                                   arguments: AddTodoArguments(todo: todo),
@@ -56,14 +57,14 @@ class ActivePage extends StatelessWidget {
                   ),
                 ] else ...[
                   Expanded(
-                    child: Container(
+                    child: SizedBox(
+                      height: MediaQuery.of(context).size.height,
                       child: Center(
                         child: Text(
                           activeEmpty,
                           style: textTheme.headline6,
                         ),
                       ),
-                      height: MediaQuery.of(context).size.height,
                     ),
                   ),
                 ],
