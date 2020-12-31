@@ -1,9 +1,13 @@
 import 'package:async_redux/async_redux.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:todo_app/features/add_todo_page/add_todo_page.dart';
 import 'package:todo_app/state/app_state/app_state.dart';
 import 'package:todo_app/main.dart';
 import 'package:todo_app/utils/constants.dart';
+import 'package:todo_app/widgets/empty_list_placeholder.dart';
+import 'package:todo_app/widgets/header_item.dart';
+import 'package:todo_app/widgets/todo_grid_view.dart';
 import 'package:todo_app/widgets/todo_item.dart';
 
 class ActivePage extends StatelessWidget {
@@ -11,44 +15,35 @@ class ActivePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
     return StoreConnector<AppState, MainViewModel>(
       model: MainViewModel(),
       builder: (BuildContext context, viewModel) {
+        final filteredList = viewModel.todoList.where((element) => element.isAccomplished == false);
         return Scaffold(
           body: Container(
             padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 8.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                if (viewModel.todoList.where((element) {
-                  return element.isAccomplished == false;
-                }).isNotEmpty) ...[
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: Text(
-                      activeToDos,
-                      style: textTheme.subtitle1.copyWith(color: Colors.grey[700]),
-                    ),
-                  ),
+                if (filteredList.isNotEmpty) ...[
+                  HeaderItem(headerTitle: activeToDos),
                   Expanded(
-                    child: GridView.count(
-                      crossAxisCount: 2,
-                      children: viewModel.todoList.where((element) {
-                        return element.isAccomplished == false;
-                      }).map((todo) {
+                    child: TodoGridView(
+                      staggeredTiles: filteredList.map((e) {
+                        final titleDescriptionNotEmpty = e.description.length > 100 && e.title.isNotEmpty;
+                        return StaggeredTile.count(1, titleDescriptionNotEmpty ? 1.50 : 0.75);
+                      }).toList(),
+                      children: filteredList.map((todo) {
                         return TodoItem(
                           title: todo.title,
                           description: todo.description,
                           onPressed: (context) {
                             Future.delayed(
                               const Duration(milliseconds: 200),
-                              () {
-                                Navigator.of(context).pushNamed(
-                                  AddTodo.route,
-                                  arguments: AddTodoArguments(todo: todo),
-                                );
-                              },
+                              () => Navigator.of(context).pushNamed(
+                                AddTodo.route,
+                                arguments: AddTodoArguments(todo: todo),
+                              ),
                             );
                           },
                         );
@@ -56,17 +51,7 @@ class ActivePage extends StatelessWidget {
                     ),
                   ),
                 ] else ...[
-                  Expanded(
-                    child: SizedBox(
-                      height: MediaQuery.of(context).size.height,
-                      child: Center(
-                        child: Text(
-                          activeEmpty,
-                          style: textTheme.headline6,
-                        ),
-                      ),
-                    ),
-                  ),
+                  EmptyListPlaceHolder(placeHolderTitle: activeEmpty),
                 ],
               ],
             ),

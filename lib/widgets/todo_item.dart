@@ -30,9 +30,11 @@ class TodoItem extends StatelessWidget {
               ],
               if (description.isNotEmpty) ...[
                 if (titleNotEmpty) const SizedBox(height: 8.0),
-                Text(
-                  description,
-                  style: textTheme.subtitle2.copyWith(fontWeight: FontWeight.w400, fontSize: 12.0),
+                Expanded(
+                  child: Text(
+                    description,
+                    style: textTheme.subtitle2.copyWith(fontWeight: FontWeight.w400, fontSize: 12.0),
+                  ),
                 ),
               ],
             ],
