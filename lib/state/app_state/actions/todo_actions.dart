@@ -33,9 +33,6 @@ class UpdateTodoAction extends ReduxAction<AppState> {
 
   @override
   Future<AppState> reduce() async {
-    final newList = <Todo>[...state.todoList];
-    final index = newList.indexWhere((element) => element.id == todo.id);
-    newList.replaceRange(index, index + 1, [todo]);
-    return state.copyWith(todoList: newList);
+    return state.copyWith(todoList: state.todoList.map((element) => element.id == todo.id ? todo : element).toList());
   }
 }

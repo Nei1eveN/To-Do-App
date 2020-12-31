@@ -33,10 +33,7 @@ class TileItem extends StatelessWidget {
           ),
           title: Text(
             title,
-            style: Theme.of(context).textTheme.subtitle2.copyWith(
-                  color: iconColor,
-                  fontSize: 15.0,
-                ),
+            style: Theme.of(context).textTheme.subtitle2.copyWith(color: iconColor, fontSize: 15.0),
           ),
           tileColor: isSelected ? focusColor : null,
           onTap: () => onTap(context),

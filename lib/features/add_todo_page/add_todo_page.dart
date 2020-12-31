@@ -53,12 +53,13 @@ class _AddTodoState extends State<AddTodo> {
       model: MainViewModel(),
       builder: (BuildContext context, vm) {
         return WillPopScope(
-          onWillPop: () {
+          onWillPop: () async {
             FocusScope.of(context).unfocus();
-            return Navigator.of(context).maybePop();
+            return Navigator.canPop(context);
           },
           child: Scaffold(
             appBar: AppBar(
+              backgroundColor: isChecked ? Colors.red : Colors.blue,
               leading: IconButton(
                 icon: const Icon(Icons.close),
                 onPressed: () {
@@ -73,7 +74,7 @@ class _AddTodoState extends State<AddTodo> {
                           id: Uuid().v1(),
                           title: title,
                           description: description,
-                          isAccomplished: isChecked,
+                          isAccomplished: isChecked
                         ),
                       ),
                     );
@@ -97,9 +98,13 @@ class _AddTodoState extends State<AddTodo> {
                 },
               ),
               actions: [
-                Checkbox(
-                  value: isChecked,
-                  onChanged: (value) => setChecked(value: value),
+                Theme(
+                  data: Theme.of(context).copyWith(unselectedWidgetColor: Colors.white),
+                  child: Checkbox(
+                    value: isChecked,
+                    onChanged: (value) => setChecked(value: value),
+                    activeColor: Colors.red,
+                  ),
                 ),
               ],
             ),
