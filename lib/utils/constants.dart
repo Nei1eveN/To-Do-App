@@ -5,3 +5,5 @@ const String active = "Active";
 const String activeEmpty = "No Active To Do's!";
 const String activeToDos = "Active To Do's";
 const String newTodo = "New Todo";
+const String note = "Note";
+const String title = "Title";
