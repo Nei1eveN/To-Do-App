@@ -5,7 +5,7 @@ class TodoItem extends StatelessWidget {
   final String description;
   final Function(BuildContext) onPressed;
 
-  const TodoItem({Key key, this.title, this.description, this.onPressed}) : super(key: key);
+  const TodoItem({this.title, this.description, this.onPressed});
 
   @override
   Widget build(BuildContext context) {
