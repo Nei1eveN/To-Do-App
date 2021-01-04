@@ -1,9 +1,11 @@
 import 'dart:async';
 
 import 'package:async_redux/async_redux.dart';
+import 'package:dartx/dartx.dart';
 import 'package:flutter/material.dart';
-import 'package:todo_app/models/todo.dart';
-import 'package:todo_app/state/app_state/app_state.dart';
+
+import '../../../models/todo.dart';
+import '../app_state.dart';
 
 class AddTodoAction extends ReduxAction<AppState> {
   final Todo todo;
@@ -14,14 +16,14 @@ class AddTodoAction extends ReduxAction<AppState> {
   Future<AppState> reduce() async {
     return state.copyWith(
       todoList: <Todo>[
-        ...state.todoList,
+        ...?state.todoList,
         Todo(
           id: todo.id,
           title: todo.title,
           description: todo.description,
           isAccomplished: todo.isAccomplished,
         )
-      ],
+      ].toUnmodifiable(),
     );
   }
 }
@@ -33,6 +35,6 @@ class UpdateTodoAction extends ReduxAction<AppState> {
 
   @override
   Future<AppState> reduce() async {
-    return state.copyWith(todoList: state.todoList.map((element) => element.id == todo.id ? todo : element).toList());
+    return state.copyWith(todoList: state.todoList.map((element) => element.id == todo.id ? todo : element).toUnmodifiable());
   }
 }
